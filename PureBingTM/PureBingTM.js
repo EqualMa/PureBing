@@ -17,6 +17,32 @@ import { importedCSS } from "./PureBingTM.css.js";
     'use strict';
 
     const HIDED_CLASS_NAME = importedCSS.classNames.hided;
+    const HIDABLE_CLASS_NAME = importedCSS.classNames.hidable;
+
+
+    /* js utils */
+
+    const switchDo = (do1, do2) => {
+        var s = true;
+        return function () {
+            if (s) {
+                do1.apply(this, arguments);
+            } else {
+                do2.apply(this, arguments);
+            }
+            s = !s;
+        };
+    };
+
+    const once = (fn) => {
+        var called = false;
+        return function () {
+            if (!called) {
+                called = true;
+                fn.apply(this, arguments);
+            }
+        };
+    };
 
     function info(msg) {
         console.log('[Pure Bing]' + msg);
@@ -95,8 +121,8 @@ import { importedCSS } from "./PureBingTM.css.js";
 
     info('enabled.');
 
-    function hide() {
-        const hide_el = e => e.classList.add(HIDED_CLASS_NAME);
+    const initHidableListOnce = once(function () {
+        const hide_el = e => e.classList.add(HIDABLE_CLASS_NAME);
 
         forEachChild(
             id('hp_container'),
@@ -119,6 +145,13 @@ import { importedCSS } from "./PureBingTM.css.js";
             },
             hide_el
         );
+    });
+
+    function hide() {
+
+        initHidableListOnce();
+
+        forEachElement(document.getElementsByClassName(HIDABLE_CLASS_NAME), e => e.classList.add(HIDED_CLASS_NAME));
 
         screenfull.request();
 
@@ -132,11 +165,7 @@ import { importedCSS } from "./PureBingTM.css.js";
     }
 
     function unhide() {
-        var hidedEls = document.getElementsByClassName(HIDED_CLASS_NAME);
-
-        while (hidedEls.length) {
-            hidedEls[0].classList.remove(HIDED_CLASS_NAME);
-        }
+        forEachElement(document.getElementsByClassName(HIDABLE_CLASS_NAME), e => e.classList.remove(HIDED_CLASS_NAME));
 
         screenfull.exit();
 
@@ -150,17 +179,7 @@ import { importedCSS } from "./PureBingTM.css.js";
 
     }
 
-    const switchDo = (do1, do2) => {
-        var s = true;
-        return function () {
-            if (s) {
-                do1.call(this);
-            } else {
-                do2.call(this);
-            }
-            s = !s;
-        };
-    };
+
 
     /**
      * 
