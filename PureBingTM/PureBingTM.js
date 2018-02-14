@@ -239,8 +239,8 @@ import { importedCSS } from "./PureBingTM.css.js";
             title: text,
             tabindex: "-1",
         };
-        const a_styles = { cursor: 'pointer', width: "40px", height: "40px" };
-        let a = create('a', attrs, a_styles);
+
+        let a = create('a', attrs);
 
         if (fn)
             a.onclick = fn;
@@ -248,7 +248,7 @@ import { importedCSS } from "./PureBingTM.css.js";
         if (id) a.id = id;
 
         if (classNames.length > 0) {
-            a.classList.add(...classNames);
+            a.classList.add(importedClassNames.button, getAvailableRegionClassName(), ...classNames);
         }
 
         if (styles) {

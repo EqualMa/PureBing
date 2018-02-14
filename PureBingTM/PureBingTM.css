@@ -1,3 +1,17 @@
+.button {
+    cursor: pointer !important;
+    width: 40px;
+    height: 40px
+}
+
+.button.en-US {
+    margin-left: 1px
+}
+
+.button.zh-CN {
+    margin: 0 10px;
+}
+
 .hidable {}
 
 .hided {
@@ -9,11 +23,11 @@
 }
 
 .screen.en-US.exit {
-    background-position: -47px, -179px
+    background-position: -47px -179px
 }
 
 .screen.en-US.full {
-    background-position: -47px, -139px
+    background-position: -47px -139px
 }
 
 .screen.zh-CN.full {
