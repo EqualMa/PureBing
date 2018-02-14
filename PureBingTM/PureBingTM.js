@@ -10,12 +10,16 @@
 
 import screenfull from "screenfull";
 import { resources } from "../FullStyleResources";
+
+import initial_css from "./PureBingTM.css";
+
 (function () {
     'use strict';
 
     const HIDE_CLASS_NAME = 'hided_by_purebing';
     const MENU_CLASS_NAME = 'pure_bing_menu';
     GM_addStyle(`.${HIDE_CLASS_NAME}{ display: none }`);
+    GM_addStyle(initial_css.toString());
 
     function info(msg) {
         console.log('[Pure Bing]' + msg);
@@ -126,6 +130,8 @@ import { resources } from "../FullStyleResources";
         addStyles(this, getLocalStyle("screenexit", "mouseenter"));
 
         getActionToAddEventListeners("screenexit", "mouseenter", "mouseleave")(this);
+
+        id('hp_ctrls').classList.add(initial_css.locals.fade);
     }
 
     function unhide() {
@@ -142,6 +148,9 @@ import { resources } from "../FullStyleResources";
         addStyles(this, getLocalStyle("screenfull", "mouseenter"));
 
         getActionToAddEventListeners("screenfull", "mouseenter", "mouseleave")(this);
+
+        id('hp_ctrls').classList.remove(initial_css.locals.fade);
+
     }
 
     const switchDo = (do1, do2) => {

@@ -9,7 +9,7 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: ['css-loader']
+                use: ['css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]']
             }
         ]
     }
