@@ -3,7 +3,7 @@
 module.exports = {
     entry: './PureBingTM/PureBingTM.js',
     output: {
-        filename: './dist/PureBingTM.min.js',
+        filename: './dist/PureBingTM.webpack.js',
     },
     module: {
         rules: [
@@ -17,7 +17,9 @@ module.exports = {
                 options: {
                     limit: 10000
                 }
-            }
+            },
+            { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
         ]
-    }
+    },
+    devtool: 'module-source-map',
 };
