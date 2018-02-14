@@ -81,7 +81,7 @@ import { importedCSS } from "./PureBingTM.css.js";
      * @param {object} styles 
      */
     const addStyles = (element, styles) => {
-        if (styles)
+        if (element && styles)
             for (const key in styles) {
                 element.style.setProperty(key, styles[key]);
             }
@@ -169,7 +169,8 @@ import { importedCSS } from "./PureBingTM.css.js";
                         },
                         hide_el
                     );
-                }
+                },
+                lap_w: () => { hide_el(id("lap_s")); }
             },
             hide_el
         );
