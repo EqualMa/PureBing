@@ -1,14 +1,56 @@
-.hidable{}
+.hidable {}
 
-.hided { display: none }
+.hided {
+    display: none
+}
 
-:local .fade {
+.screen.en-US {
+    background: url("/s/a/hpc23.png") no-repeat rgba(34, 34, 34, 0.75)
+}
+
+.screen.en-US.exit {
+    background-position: -47px, -179px
+}
+
+.screen.en-US.full {
+    background-position: -47px, -139px
+}
+
+.screen.zh-CN.full {
+    background-image: url("../images/zh-CN/screenfull.png")
+}
+
+.screen.zh-CN.full:hover {
+    background-image: url("../images/zh-CN/screenfull.hover.png")
+}
+
+.screen.zh-CN.exit {
+    background-image: url("../images/zh-CN/screenexit.png")
+}
+
+.screen.zh-CN.exit:hover {
+    background-image: url("../images/zh-CN/screenexit.hover.png")
+}
+
+.download.en-US {
+    background: no-repeat center rgba(34, 34, 34, 0.75) url('../images/en-US/download.png')
+}
+
+.download.zh-CN {
+    background-image: url('../images/zh-CN/download.png')
+}
+
+.download.zh-CN:hover {
+    background-image: url('../images/zh-CN/download.hover.png')
+}
+
+.fade {
     opacity: 0;
     transition: opacity .25s ease-in-out;
     -moz-transition: opacity .25s ease-in-out;
     -webkit-transition: opacity .25s ease-in-out;
 }
- 
-:local .fade:hover {
+
+.fade:hover {
     opacity: 1;
 }

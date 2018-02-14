@@ -9,15 +9,16 @@
 // ==/UserScript==
 
 import screenfull from "screenfull";
-import { resources } from "../FullStyleResources";
+import { resources, getLocalized } from "../shared/Resources";
 
 import { importedCSS } from "./PureBingTM.css.js";
 
 (function () {
     'use strict';
 
-    const HIDED_CLASS_NAME = importedCSS.classNames.hided;
-    const HIDABLE_CLASS_NAME = importedCSS.classNames.hidable;
+    const importedClassNames = importedCSS.classNames;
+    const HIDED_CLASS_NAME = importedClassNames.hided;
+    const HIDABLE_CLASS_NAME = importedClassNames.hidable;
 
 
     /* js utils */
@@ -50,7 +51,17 @@ import { importedCSS } from "./PureBingTM.css.js";
 
     const id = id => document.getElementById(id);
 
+    const classElements = className => document.getElementsByClassName(className);
+
     const getRegion = () => document.body.classList[1];
+
+    const do_for_element = (element, previousValue) => {
+        return action => do_for_element(element, action(element, previousValue));
+    };
+
+    function actions_for_element(...actions) {
+        return element => actions.forEach(action => action(element));
+    }
 
     /**
      * 
@@ -75,6 +86,23 @@ import { importedCSS } from "./PureBingTM.css.js";
                 element.style.setProperty(key, styles[key]);
             }
     };
+
+    /**
+     * 
+     * @param {...string} classNames 
+     */
+    const actionToAddClasses = (...classNames) => {
+        return element => element.classList.add(...classNames);
+    };
+
+    /**
+     * 
+     * @param {...string} classNames 
+     */
+    const actionToRemoveClasses = (...classNames) => {
+        return element => element.classList.remove(...classNames);
+    };
+
 
     /**
      * 
@@ -122,7 +150,7 @@ import { importedCSS } from "./PureBingTM.css.js";
     info('enabled.');
 
     const initHidableListOnce = once(function () {
-        const hide_el = e => e.classList.add(HIDABLE_CLASS_NAME);
+        const hide_el = actionToAddClasses(HIDABLE_CLASS_NAME);
 
         forEachChild(
             id('hp_container'),
@@ -151,35 +179,42 @@ import { importedCSS } from "./PureBingTM.css.js";
 
         initHidableListOnce();
 
-        forEachElement(document.getElementsByClassName(HIDABLE_CLASS_NAME), e => e.classList.add(HIDED_CLASS_NAME));
+        // hide
+        forEachElement(classElements(HIDABLE_CLASS_NAME), actionToAddClasses(HIDED_CLASS_NAME));
 
+        // fullscreen
         screenfull.request();
 
-        getActionToRemoveEventListeners("screenfull", "mouseenter", "mouseleave")(this);
+        // change icon
+        document.querySelectorAll(`.${importedClassNames.screen}.${importedClassNames.full}`).forEach(
+            actions_for_element(
+                actionToRemoveClasses(importedClassNames.full),
+                actionToAddClasses(importedClassNames.exit)
+            )
+        );
 
-        addStyles(this, getLocalStyle("screenexit", "mouseenter"));
-
-        getActionToAddEventListeners("screenexit", "mouseenter", "mouseleave")(this);
-
+        // fade when mouseout
         id('hp_ctrls').classList.add(importedCSS.classNames.fade);
     }
 
     function unhide() {
-        forEachElement(document.getElementsByClassName(HIDABLE_CLASS_NAME), e => e.classList.remove(HIDED_CLASS_NAME));
+        // unhide
+        forEachElement(classElements(HIDABLE_CLASS_NAME), actionToRemoveClasses(HIDED_CLASS_NAME));
 
+        // exit fullscreen
         screenfull.exit();
 
-        getActionToRemoveEventListeners("screenexit", "mouseenter", "mouseleave")(this);
+        // change icon to screenfull
+        document.querySelectorAll(`.${importedClassNames.screen}.${importedClassNames.exit}`).forEach(
+            actions_for_element(
+                actionToRemoveClasses(importedClassNames.exit),
+                actionToAddClasses(importedClassNames.full)
+            )
+        );
 
-        addStyles(this, getLocalStyle("screenfull", "mouseenter"));
-
-        getActionToAddEventListeners("screenfull", "mouseenter", "mouseleave")(this);
-
+        // don't fade
         id('hp_ctrls').classList.remove(importedCSS.classNames.fade);
-
     }
-
-
 
     /**
      * 
@@ -195,9 +230,10 @@ import { importedCSS } from "./PureBingTM.css.js";
      * @param {function} fn 
      * @param {object} styles 可通过styles参数设置按钮的样式
      * @param {string=} id
+     * @param {...string} classNames
      * 
      */
-    function addButton(text, fn, styles, id) {
+    function addButton(text, fn, styles, id, ...classNames) {
         const attrs = {
             role: "button",
             title: text,
@@ -211,15 +247,9 @@ import { importedCSS } from "./PureBingTM.css.js";
 
         if (id) a.id = id;
 
-        //         a.innerHTML = `
-        // <div class="sc_light">
-        // <div style="
-        // overflow: hidden;
-        // width: 40px;
-        // height: 40px;
-        // "></div>
-        // </div>
-        // `.trim();
+        if (classNames.length > 0) {
+            a.classList.add(...classNames);
+        }
 
         if (styles) {
             addStyles(a, styles);
@@ -232,51 +262,20 @@ import { importedCSS } from "./PureBingTM.css.js";
         return action_a;
     }
 
+    function getAvailableRegionClassName() {
+        return getLocalized(importedCSS.classNames, getRegion());
+    }
+
     function getLocalTitle(btnName) {
-        return resources.getLocalized(resources[btnName].title, getRegion());
-    }
-
-    function getLocalStyle(btnName, event) {
-        return resources.getLocalized(resources[btnName][event].style, getRegion());
-    }
-
-    /**
-     * get a unique event listener to change style
-     * @param {string} btnName
-     * @param {string} event
-     */
-    const getEventListener = function () {
-        const listeners = {};
-        return function (btnName, event) {
-            if (listeners[btnName] === undefined) {
-                listeners[btnName] = {};
-            }
-            if (listeners[btnName][event] === undefined) {
-                listeners[btnName][event] = function () { addStyles(this, getLocalStyle(btnName, event)); };
-            }
-            return listeners[btnName][event];
-        };
-    }();
-
-    function getActionToAddEventListeners(btnName, ...events) {
-        return element => events.forEach(ev => element.addEventListener(ev, getEventListener(btnName, ev)));
-    }
-
-    function getActionToRemoveEventListeners(btnName, ...events) {
-        return element => events.forEach(ev => element.removeEventListener(ev, getEventListener(btnName, ev)));
-    }
-
-    function addLocalizedButton(fn, btnName, ...events) {
-        return addButton(getLocalTitle(btnName), fn, getLocalStyle(btnName, events[0]))(
-            getActionToAddEventListeners(btnName, ...events)
-        );
+        return getLocalized(resources[btnName].title, getRegion());
     }
 
     /* end declaration. start main program */
 
-    addLocalizedButton(switchDo(hide, unhide), "screenfull", "mouseleave", "mouseenter");
+    addButton(getLocalTitle("screenfull"), switchDo(hide, unhide), null, null,
+        importedClassNames.screen, importedClassNames.full, getAvailableRegionClassName());
 
-    addLocalizedButton(null, "download", "mouseleave", "mouseenter")(da => {
+    addButton(getLocalTitle("download"), null, null, null, importedClassNames.download, getAvailableRegionClassName())(da => {
         // watch background image change
 
         const bgDiv = id('bgDiv');
@@ -308,5 +307,4 @@ import { importedCSS } from "./PureBingTM.css.js";
             }()
         );
     });
-
 })();

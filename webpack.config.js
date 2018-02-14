@@ -10,6 +10,13 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]']
+            },
+            {
+                test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 10000
+                }
             }
         ]
     }
