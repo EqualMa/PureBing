@@ -4,9 +4,8 @@
   "description": "",
   "main": "PureBing.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build-style": "node i18n-dev-build.js",
-    "build": "npm run build-style && webpack"
+    "build-resources": "node dev-utils/i18n/i18n-dev-build.js",
+    "build": "npm run build-resources && webpack"
   },
   "author": "",
   "license": "ISC",

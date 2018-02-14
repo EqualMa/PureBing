@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 import screenfull from "screenfull";
-import { resources } from "./FullStyleResources";
+import { resources } from "../FullStyleResources";
 (function () {
     'use strict';
 
