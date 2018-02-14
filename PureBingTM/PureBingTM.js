@@ -11,15 +11,12 @@
 import screenfull from "screenfull";
 import { resources } from "../FullStyleResources";
 
-import initial_css from "./PureBingTM.css";
+import { importedCSS } from "./PureBingTM.css.js";
 
 (function () {
     'use strict';
 
-    const HIDE_CLASS_NAME = 'hided_by_purebing';
-    const MENU_CLASS_NAME = 'pure_bing_menu';
-    GM_addStyle(`.${HIDE_CLASS_NAME}{ display: none }`);
-    GM_addStyle(initial_css.toString());
+    const HIDED_CLASS_NAME = importedCSS.classNames.hided;
 
     function info(msg) {
         console.log('[Pure Bing]' + msg);
@@ -99,7 +96,7 @@ import initial_css from "./PureBingTM.css";
     info('enabled.');
 
     function hide() {
-        const hide_el = e => e.classList.add(HIDE_CLASS_NAME);
+        const hide_el = e => e.classList.add(HIDED_CLASS_NAME);
 
         forEachChild(
             id('hp_container'),
@@ -111,7 +108,7 @@ import initial_css from "./PureBingTM.css";
                             hp_ctrls: hp_ctrls => {
                                 forEachChild(
                                     hp_ctrls,
-                                    { sh_rdiv: sh_rdiv => { sh_rdiv.classList.add(MENU_CLASS_NAME); } },
+                                    { sh_rdiv: () => { } },
                                     hide_el
                                 );
                             }
@@ -131,14 +128,14 @@ import initial_css from "./PureBingTM.css";
 
         getActionToAddEventListeners("screenexit", "mouseenter", "mouseleave")(this);
 
-        id('hp_ctrls').classList.add(initial_css.locals.fade);
+        id('hp_ctrls').classList.add(importedCSS.classNames.fade);
     }
 
     function unhide() {
-        var hidedEls = document.getElementsByClassName(HIDE_CLASS_NAME);
+        var hidedEls = document.getElementsByClassName(HIDED_CLASS_NAME);
 
         while (hidedEls.length) {
-            hidedEls[0].classList.remove(HIDE_CLASS_NAME);
+            hidedEls[0].classList.remove(HIDED_CLASS_NAME);
         }
 
         screenfull.exit();
@@ -149,7 +146,7 @@ import initial_css from "./PureBingTM.css";
 
         getActionToAddEventListeners("screenfull", "mouseenter", "mouseleave")(this);
 
-        id('hp_ctrls').classList.remove(initial_css.locals.fade);
+        id('hp_ctrls').classList.remove(importedCSS.classNames.fade);
 
     }
 
