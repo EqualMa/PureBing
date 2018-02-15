@@ -1,10 +1,9 @@
 {
   "name": "purebing",
   "version": "1.0.0",
-  "description": "a script expansion to make bing.com homepage looks better.",
+  "description": "a script extension to make bing.com homepage looks better.",
   "main": "PureBingTM/PureBingTM.js",
   "scripts": {
-    "uglify": "uglifyjs dist/PureBingTM.webpack.js -c -m -o dist/PureBingTM.min.js --source-map",
     "build": "webpack "
   },
   "author": "",
@@ -20,7 +19,6 @@
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "uglify-js": "^3.3.10",
     "url-loader": "^0.6.2",
     "webpack": "^3.11.0"
   },
