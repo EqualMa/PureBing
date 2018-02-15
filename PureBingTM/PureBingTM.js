@@ -7,6 +7,10 @@
 // @match        https://*.bing.com/
 // @include      /^https?://.*\.bing\.com/(\?.*)?$/
 // @grant        GM_addStyle
+// @homepage     https://github.com/EqualMa/PureBing
+// @updateURL    https://raw.githubusercontent.com/EqualMa/PureBing/master/dist/PureBingTM.min.js
+// @downloadURL  https://raw.githubusercontent.com/EqualMa/PureBing/master/dist/PureBingTM.min.js
+// @supportURL   https://github.com/EqualMa/PureBing/issues
 // ==/UserScript==
 
 import screenfull from "screenfull";
