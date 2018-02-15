@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         Pure Bing
-// @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  Enjoy pure pictures and videos on bing.com
+// @namespace    https://equal.stream
+// @version      1.0.0
+// @description  Enjoy pure home page of bing.com
 // @author       Equal Ma
+// @match        https://*.bing.com/
 // @include      /^https?://.*\.bing\.com/(\?.*)?$/
 // @grant        GM_addStyle
 // ==/UserScript==
