@@ -5,7 +5,7 @@
   "main": "PureBingTM/PureBingTM.js",
   "scripts": {
     "uglify": "uglifyjs dist/PureBingTM.webpack.js -c -m -o dist/PureBingTM.min.js --source-map",
-    "build": "webpack && npm run uglify"
+    "build": "webpack "
   },
   "author": "",
   "license": "ISC",

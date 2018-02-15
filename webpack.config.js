@@ -1,9 +1,11 @@
-// const path = require('path');
+const webpack = require("webpack");
+
+const ENTRY_JS_PATH = './PureBingTM/PureBingTM.js';
 
 module.exports = {
-    entry: './PureBingTM/PureBingTM.js',
+    entry: ENTRY_JS_PATH,
     output: {
-        filename: './dist/PureBingTM.webpack.js',
+        filename: './dist/PureBingTM.min.js',
     },
     module: {
         rules: [
@@ -22,4 +24,13 @@ module.exports = {
         ]
     },
     devtool: 'module-source-map',
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true
+        }),
+        new webpack.BannerPlugin({
+            banner: require("./dev/banner").getHeadComment(ENTRY_JS_PATH),
+            raw: true, entryOnly: true
+        }),
+    ],
 };
